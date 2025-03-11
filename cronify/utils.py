@@ -1,5 +1,6 @@
 import os
 import re
+import shlex
 
 def load_crontab_file(file_path: str):
     jobs = []
@@ -36,3 +37,22 @@ def check_environment_in_command(cmd: str):
     for var in vars_found:
         if var not in os.environ:
             print(f"Warning: Env var ${var} not set.")
+
+def check_command_file(cmd: str):
+    # Split command while skipping env assignments
+    tokens = shlex.split(cmd)
+    exe = None
+    for token in tokens:
+        if "=" in token:
+            continue
+        else:
+            exe = token
+            break
+    if exe is None:
+        print("Warning: No executable found in command.")
+        return
+    if not os.path.isfile(exe):
+        print(f"Warning: Executable '{exe}' not found.")
+        return
+    if not os.access(exe, os.X_OK):
+        print(f"Warning: File '{exe}' is not executable.")
