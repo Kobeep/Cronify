@@ -1,0 +1,11 @@
+---
+# Sample jobs:
+jobs:
+  - name: backup
+    schedule: "0 0 * * *"
+    command: "/usr/local/bin/backup.sh"
+    env:
+      BACKUP_DIR: "/data/backups"
+  - name: cleanup
+    schedule: "30 7 * * *"
+    command: "/usr/local/bin/cleanup.sh"
